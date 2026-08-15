@@ -2,11 +2,34 @@ import { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { markdown } from '@codemirror/lang-markdown';
 import Markdown from 'react-markdown';
+import { compressText, decompressText } from './engine/compression'
 
 const defaultText = "console.log('Hello, world!'";
 
 function App() {
   const [text, setText] = useState(defaultText);
+  const [generatedUrl, setGeneratedUrl] = useState('');
+
+  const handleGenerateLink = async () => {
+    console.log("1. Button clicked");
+    try {
+      console.log("2. Starting compression");
+      const hash = await compressText(text);
+      console.log("3. Compression done, hash:", hash);
+      
+      const fullUrl = `${window.location.origin}/#${hash}`;
+      console.log("4. Full URL:", fullUrl);
+  
+      setGeneratedUrl(fullUrl);
+      console.log("5. State updated");
+      
+      window.location.hash = hash;
+      console.log("6. Hash set");
+    } catch (err) {
+      console.error("ERROR:", err);
+      alert(`Error: ${err.message}`);
+    }
+  };
 
   return (
     <div className="flex h-screen w-screen bg-slate-900 text-slate-100 overflow-hidden">
@@ -43,11 +66,27 @@ function App() {
             </div>
             
             <button 
-              onClick={() => alert("TODO; connect button to link generation")}
-              className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded text-sm transition-colors"
+              type="button"
+              onClick={handleGenerateLink}
+              className="z-10 w-full py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded text-sm transition-colors cursor-pointer"
             >
               Generate Link
             </button>
+            
+            {generatedUrl ? (
+              <div className="mt-2 flex flex-col gap-1">
+                <label className="text-[10px] font-mono text-slate-400 uppercase">Shareable Link</label>
+                <input 
+                  type="text" 
+                  readOnly 
+                  value={generatedUrl} 
+                  onClick={(e) => (e.target as HTMLInputElement).select()} 
+                  className="w-full p-2 bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded font-mono focus:outline-none focus:border-blue-500"
+                />
+              </div>
+            ) : (
+              <span className="text-xs text-slate-500 italic">No link generated yet</span>
+            )}
     
             <button 
               onClick={() => setText('')}
