@@ -17,26 +17,23 @@ export async function compressText(text: string): Promise<string> {
 }
 
 export async function decompressText(hash: string): Promise<string> {
-  let base64 = hash.replace(/-/g, '+').replace(/_/g, '/');
-    while (base64.length % 4 !== 0) {
-      base64 += '=';
-    }
-
+  try {
+    let base64 = hash.replace(/-/g, '+').replace(/_/g, '/');
+    while (base64.length % 4 !== 0) base64 += '=';
+    
     const binaryString = atob(base64);
-      const bytes = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
+    const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
+    
+    const ds = new DecompressionStream('deflate-raw');
+    const writer = ds.writable.getWriter();
 
-  const ds = new DecompressionStream('deflate-raw');
-  const writer = ds.writable.getWriter();
-  await writer.write(bytes.buffer as ArrayBuffer);
-  await writer.close();
-
-  const decompressedBuffer = await new Response(ds.readable).arrayBuffer();
-
-  const decoder = new TextDecoder();
-  return decoder.decode(decompressedBuffer);
+    writer.write(bytes).finally(() => writer.close());
+    const decompressedBuffer = await new Response(ds.readable).arrayBuffer();
+    return new TextDecoder().decode(decompressedBuffer);
+  } catch (err) {
+    console.error("Decompression failed:", err);
+    throw err;
+  }
 }
 
 

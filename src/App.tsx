@@ -1,14 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { markdown } from '@codemirror/lang-markdown';
 import Markdown from 'react-markdown';
 import { compressText, decompressText } from './engine/compression'
 
-const defaultText = "console.log('Hello, world!'";
-
 function App() {
-  const [text, setText] = useState(defaultText);
+  const [text, setText] = useState('');
   const [generatedUrl, setGeneratedUrl] = useState('');
+  
+  useEffect(() => {
+    const rawHash = window.location.hash;
+    const cleanHash = rawHash.replace('#', '');
+    
+    if (!cleanHash) return;
+    
+    (async () => {
+      try {
+        const text = await decompressText(cleanHash);
+        setText(text);
+      } catch (err) {
+        console.error("Decompression failed:", err);
+      }
+    })();
+  }, []);
 
   const handleGenerateLink = async () => {
     console.log("1. Button clicked");
