@@ -20,6 +20,7 @@ function App() {
       try {
         const text = await decompressText(cleanHash);
         setText(text);
+        setGeneratedUrl(window.location.href)
       } catch (err) {
         console.error("Decompression failed:", err);
       }
