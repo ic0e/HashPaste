@@ -8,6 +8,7 @@ function App() {
   const [text, setText] = useState('');
   const [generatedUrl, setGeneratedUrl] = useState('');
   const [copied, setIsCopied] = useState('Copy');
+  const [linkIsCopied, setLinkIsCopied] = useState('Copy');
   
   useEffect(() => {
     const rawHash = window.location.hash;
@@ -52,6 +53,17 @@ function App() {
       setIsCopied('Copied!');
       
       setTimeout(() => setIsCopied('Copy'), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+  
+  const handleLinkCopy = async (textToCopy: string) => {
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setLinkIsCopied('Copied!');
+      
+      setTimeout(() => setLinkIsCopied('Copy'), 2000);
     } catch (err) {
       console.error('Failed to copy text: ', err);
     }
@@ -115,26 +127,43 @@ function App() {
             </button>
             
             {generatedUrl ? (
-              <div className="mt-2 flex flex-col gap-1">
-                <label className="text-[10px] font-mono text-slate-400 uppercase">Shareable Link</label>
-                <input 
-                  type="text" 
-                  readOnly 
-                  value={generatedUrl} 
-                  onClick={(e) => (e.target as HTMLInputElement).select()} 
-                  className="w-full p-2 bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded font-mono focus:outline-none focus:border-blue-500"
-                />
-              </div>
-            ) : (
-              <span className="text-xs text-slate-500 italic">No link generated yet</span>
-            )}
-    
-            <button 
-              onClick={() => setText('')}
-              className="w-full py-2 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded text-sm transition-colors"
-            >
-              Clear Editor
-            </button>
+                <div className="p-1 bg-slate-950 border-b border-slate-800 text-xs font-mono text-slate-400">
+                  <label className="text-[10px] font-mono text-slate-400 uppercase">Shareable Link</label>
+                  <div className="relative flex items-center">
+                    <input 
+                      type="text" 
+                      readOnly 
+                      value={generatedUrl} 
+                      onClick={(e) => (e.target as HTMLInputElement).select()} 
+                      className="w-full p-2 pr-20 bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded font-mono focus:outline-none focus:border-blue-500"
+                    />
+                    <button
+                      className="absolute right-1.5 flex items-center gap-1.5 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-slate-100 rounded text-[11px] transition-colors"
+                      onClick={() => handleLinkCopy(generatedUrl)}
+                    >
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        fill="currentColor" 
+                        viewBox="0 0 24 24" 
+                        className="w-3.5 h-3.5"
+                      >
+                        <path d="M20 2H10c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m0 12H10V4h10z" />
+                        <path d="M14 20H4V10h2V8H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-2h-2z" />
+                      </svg>
+                      <span>{linkIsCopied}</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <span className="text-xs text-slate-500 italic">No link generated yet</span>
+              )}
+        
+                <button 
+                  onClick={() => setText('')}
+                  className="w-full py-2 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded text-sm transition-colors"
+                >
+                  Clear Editor
+                </button>
           </div>
         </div>
   )
