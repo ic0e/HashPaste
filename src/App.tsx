@@ -7,6 +7,7 @@ import { compressText, decompressText } from './engine/compression'
 function App() {
   const [text, setText] = useState('');
   const [generatedUrl, setGeneratedUrl] = useState('');
+  const [copied, setIsCopied] = useState('Copy');
   
   useEffect(() => {
     const rawHash = window.location.hash;
@@ -45,12 +46,38 @@ function App() {
     }
   };
 
+  const handleCopy = async (textToCopy: string) => {
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setIsCopied('Copied!');
+      
+      setTimeout(() => setIsCopied('Copy'), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
   return (
     <div className="flex h-screen w-screen bg-slate-900 text-slate-100 overflow-hidden">
           <div className="w-[80%] h-full flex flex-row border-r border-slate-800">
             <div className="w-1/2 h-full border-r border-slate-800 flex flex-col">
-              <div className="p-3 bg-slate-950 border-b border-slate-800 text-xs font-mono text-slate-400">
-                EDITOR
+              <div className="flex items-center p-3 bg-slate-950 border-b border-slate-800 text-xs font-mono text-slate-400">
+                <span>EDITOR</span>
+            <button
+              className="ml-auto flex items-center gap-1.5 hover:text-slate-200 transition-colors"
+              onClick={() => handleCopy(text)}
+            >
+              <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    fill="currentColor" 
+                    viewBox="0 0 24 24" 
+                    className="w-3.5 h-3.5"
+                  >
+                    <path d="M20 2H10c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m0 12H10V4h10z" />
+                    <path d="M14 20H4V10h2V8H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-2h-2z" />
+                  </svg>
+                  <span>{copied}</span>
+                </button>
               </div>
               <div className="flex-1 overflow-auto">
                 <CodeMirror
