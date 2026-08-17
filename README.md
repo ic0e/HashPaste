@@ -18,7 +18,7 @@ Type or paste your text. The preview renders markdown as you type. Hit "Generate
 
 ## Browser Support & Limitations
 
-HashPaste uses native compression (currently deflate-raw, switching to Brotli) supported by all modern browsers. URL length is limited by browser capabilities, realistically around 2MB of uncompressed text depending on your browser.
+HashPaste uses native compression (`brotli-wasm`) supported by all modern browsers. URL length is limited by browser capabilities, realistically around 2MB of uncompressed text depending on your browser.
 
 It is best used for short snippets (debug outputs, config files, security reports, etc.) but can theoretically be used for anything as long as link length isn't a concern.
 
@@ -40,7 +40,6 @@ Open `http://localhost:5173` in your browser.
 ## Roadmap
 
 **Upcoming:** 
-- Brotli compression (issue #1) - better compression ratios, and URL length validation to match modern browser limits.
 - URL shortener (conceptual idea); automatic redirects to any URL you provide, with the aim of this to be a free databaseless URL link shortener as well.
 - Client side password encryption (issue #3) - Create a password function that uses symmetric encryption on the paste with the hashed password as a key, with a password field that lets you encrypt it by entering the correct password.
 

@@ -1,39 +1,31 @@
-export async function compressText(text: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const bytes: Uint8Array = encoder.encode(text);
-  
-  const cs = new CompressionStream('deflate-raw');
-  const writer = cs.writable.getWriter();
+import brotliPromise from 'brotli-wasm';
 
-  //@ts-ignore
-  writer.write(bytes);
-  writer.close();
-  
-  await new Promise(resolve => setTimeout(resolve, 0));
-  
-  const compressedBuffer: ArrayBuffer = await new Response(cs.readable).arrayBuffer();
-  const compressedBytes = new Uint8Array(compressedBuffer);
-  return bytesToBase64Url(compressedBytes);
+export async function compressText(text: string): Promise<string> {
+  const brotli = await brotliPromise;
+
+  const textEncoder = new TextEncoder();
+
+  const uncompressedData = textEncoder.encode(text);
+  const compressedData = brotli.compress(uncompressedData);
+
+  return bytesToBase64Url(compressedData);
 }
 
 export async function decompressText(hash: string): Promise<string> {
-  try {
-    let base64 = hash.replace(/-/g, '+').replace(/_/g, '/');
-    while (base64.length % 4 !== 0) base64 += '=';
-    
-    const binaryString = atob(base64);
-    const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
-    
-    const ds = new DecompressionStream('deflate-raw');
-    const writer = ds.writable.getWriter();
+  const brotli = await brotliPromise;
+  
+  let base64 = hash.replace(/-/g, '+').replace(/_/g, '/');
+  while (base64.length % 4 !== 0) base64 += '=';
 
-    writer.write(bytes).finally(() => writer.close());
-    const decompressedBuffer = await new Response(ds.readable).arrayBuffer();
-    return new TextDecoder().decode(decompressedBuffer);
-  } catch (err) {
-    console.error("Decompression failed:", err);
-    throw err;
-  }
+  const binaryString = atob(base64);
+  const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
+  
+  const textDecoder = new TextDecoder();
+  const decompressedData = brotli.decompress(bytes);
+
+  const result = textDecoder.decode(decompressedData);
+
+  return result;
 }
 
 
