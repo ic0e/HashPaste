@@ -68,7 +68,7 @@ function App() {
   return (
     <div className="flex flex-col h-screen w-full bg-slate-900 text-slate-100 overflow-hidden">
       <Header />
-      <div className="flex h-screen w-screen bg-slate-900 text-slate-100 overflow-hidden">
+      <div className="flex h-screen w-screen bg-mist-900 text-slate-100 overflow-hidden">
             <div className="w-[80%] h-full flex flex-row border-r border-slate-800">
               <div className="w-1/2 h-full border-r border-slate-800 flex flex-col">
                 <div className="flex items-center p-3 bg-slate-950 border-b border-slate-800 text-xs font-mono text-slate-400">
@@ -105,7 +105,7 @@ function App() {
                 <div className="p-3 bg-slate-950 border-b border-slate-800 text-xs font-mono text-slate-400">
                   PREVIEW
                 </div>
-                <div className="flex-1 p-6 overflow-auto prose prose-invert max-w-none">
+                <div className="flex-1 p-6 overflow-auto prose prose-invert max-w-none bg-mist-900">
                   <Markdown>{text}</Markdown>
                 </div>
               </div>
@@ -119,7 +119,7 @@ function App() {
               <button 
                 type="button"
                 onClick={handleGenerateLink}
-                className="z-10 w-full py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded text-sm transition-colors cursor-pointer"
+                className="z-10 w-full py-2 px-4 bg-green-950 hover:bg-green-900 text-green-50 font-medium border border-green-900/80 hover:border-green-700 transition-all duration-200 cursor-pointer text-sm"
               >
                 Generate Link
               </button>
@@ -133,7 +133,7 @@ function App() {
                         readOnly 
                         value={generatedUrl} 
                         onClick={(e) => (e.target as HTMLInputElement).select()} 
-                        className="w-full p-2 pr-20 bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded font-mono focus:outline-none focus:border-blue-500"
+                        className="w-full p-2 pr-20 bg-green-950/40 border border-slate-700 text-slate-200 text-xs rounded font-mono focus:outline-none focus:border-blue-500"
                       />
                       <button
                         className="absolute right-1.5 flex items-center gap-1.5 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-slate-100 rounded text-[11px] transition-colors"
@@ -158,7 +158,7 @@ function App() {
           
                   <button 
                     onClick={() => setText('')}
-                    className="w-full py-2 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded text-sm transition-colors"
+                    className="z-10 w-full py-2 px-4 bg-gray-900 hover:bg-green-950 text-green-50 font-medium border border-green-950/80 hover:border-green-700 transition-all duration-200 cursor-pointer text-sm"
                   >
                     Clear Editor
                   </button>
