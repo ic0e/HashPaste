@@ -38,7 +38,7 @@ function App() {
       window.location.hash = hash;
     } catch (err) {
       console.error("ERROR:", err);
-      alert(`Error: ${err.message}`);
+      alert(`Error: ${(err as Error).message}`);
     }
   };
 
