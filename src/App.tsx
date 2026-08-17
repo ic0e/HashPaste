@@ -28,20 +28,14 @@ function App() {
   }, []);
 
   const handleGenerateLink = async () => {
-    console.log("1. Button clicked");
     try {
-      console.log("2. Starting compression");
       const hash = await compressText(text);
-      console.log("3. Compression done, hash:", hash);
       
       const fullUrl = `${window.location.origin}/#${hash}`;
-      console.log("4. Full URL:", fullUrl);
   
       setGeneratedUrl(fullUrl);
-      console.log("5. State updated");
       
       window.location.hash = hash;
-      console.log("6. Hash set");
     } catch (err) {
       console.error("ERROR:", err);
       alert(`Error: ${err.message}`);
