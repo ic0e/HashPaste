@@ -3,6 +3,9 @@ HashPaste is a zero database web application that compresses and embeds text dir
 
 It compresses raw text using browser native compression and embeds the resulting payload directly into URL hash fragments. Because the data lives entirely within the link itself, pastes can be decoded instantly without a backend. This ensures no database storage is ever needed, the links never expire and data is recoverable even if the service shuts down.
 
+## Try it:
+**[hash-paste.vercel.app](https://hash-paste.vercel.app)**
+
 ## Use Cases
 
 HashPaste works for any short lived text sharing: API configs, error logs, debug output, temporary notes, or code snippets. Anything you'd normally throw into a pastebin, but where you want the link itself to be the only record.
