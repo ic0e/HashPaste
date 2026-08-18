@@ -3,6 +3,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { markdown } from '@codemirror/lang-markdown';
 import Markdown from 'react-markdown';
 import { compressText, decompressText } from './engine/compression'
+import { encrypt, decrypt } from './engine/encryption';
 import Header from './components/header'
 
 function App() {
@@ -10,6 +11,13 @@ function App() {
   const [generatedUrl, setGeneratedUrl] = useState('');
   const [copied, setIsCopied] = useState('Copy');
   const [linkIsCopied, setLinkIsCopied] = useState('Copy');
+  const [decryptState, setDecryptState] = useState('');
+
+  const [password, setPassword] = useState('');
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
   
   useEffect(() => {
     const rawHash = window.location.hash;
@@ -62,6 +70,41 @@ function App() {
       setTimeout(() => setLinkIsCopied('Copy'), 2000);
     } catch (err) {
       console.error('Failed to copy text: ', err);
+    }
+  };
+
+  const handleEncryptContent = async (text: string, password: string) => {
+    if (!text || !password) {
+      console.error('Text and password are required');
+      return;
+    }
+    
+    try {
+      const encrypted_text = await encrypt(text, password);
+      setText(encrypted_text);
+    } catch (err) {
+      console.error('Failed to encrypt: ', err);
+    }
+  };
+
+  const handleDecryptContent = async (text: string, password: string) => {
+    console.log("Payload to decrypt:", text); 
+    console.log("Payload type:", typeof text);
+    if (!text || !password) {
+      console.error('Text and password are required');
+      return;
+    }
+    
+    try {
+      const decrypted = await decrypt(text, password);
+      if (decrypted == "H_P_FAILED_DECRYPTION") {
+        setDecryptState("Failed decrypting! Wrong password or corrupted data.");
+      }
+      else {
+        setText(decrypted);
+      }
+    } catch (err) {
+      console.error('Failed to decrypt: ', err);
     }
   };
 
@@ -161,6 +204,28 @@ function App() {
                     className="z-10 w-full py-2 px-4 bg-gray-900 hover:bg-green-950 text-green-50 font-medium border border-green-950/80 hover:border-green-700 transition-all duration-200 cursor-pointer text-sm"
                   >
                     Clear Editor
+                  </button>
+
+                  <input
+                    type="text"
+                    value={password}
+                    onChange={handlePasswordChange}
+                  />
+          
+                  <button 
+                    type="button"
+                    onClick={() => handleEncryptContent(text, password)}
+                    className="z-10 w-full py-2 px-4 bg-green-950 hover:bg-green-900 text-green-50 font-medium border border-green-900/80 hover:border-green-700 transition-all duration-200 cursor-pointer text-sm"
+                  >
+                    Encrypt Content
+                  </button>
+
+                  <button 
+                    type="button"
+                    onClick={() => handleDecryptContent(text, password)}
+                    className="z-10 w-full py-2 px-4 bg-green-950 hover:bg-green-900 text-green-50 font-medium border border-green-900/80 hover:border-green-700 transition-all duration-200 cursor-pointer text-sm"
+                  >
+                    Decrypt Content
                   </button>
             </div>
       </div>

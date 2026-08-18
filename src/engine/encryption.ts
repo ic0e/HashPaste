@@ -57,7 +57,7 @@ export async function decrypt(payload: string, password: string): Promise<string
     return sodium.to_string(decryptedBytes);
   } catch (cryptoErr) {
     console.error("Decryption failed: Incorrect password or corrupted data.");
-    return "H_P_FAILED_ENCRYPTION";
+    return "H_P_FAILED_DECRYPTION";
   }
 }
 
