@@ -12,6 +12,7 @@ function App() {
   const [copied, setIsCopied] = useState('Copy');
   const [linkIsCopied, setLinkIsCopied] = useState('Copy');
   const [encryptState, setEncryptState] = useState('');
+  const [encrypted_text, setEncrypted] = useState<string | null>(null);
 
   const [password, setPassword] = useState('');
 
@@ -86,7 +87,7 @@ function App() {
       
       const encrypted_text = await encrypt(text, password);
       setText(encrypted_text);
-      handleGenerateLink();
+      setEncrypted(encrypted_text);
       setEncryptState("Successfully encrypted!");
     } catch (err) {
       console.error('Failed to encrypt: ', err);
@@ -113,7 +114,7 @@ function App() {
       }
       else {
         setText(decrypted);
-        handleGenerateLink();
+        setEncrypted(decrypted);
         setEncryptState("Successfully decrypted!");
       }
     } catch (err) {
@@ -121,6 +122,12 @@ function App() {
       setEncryptState("Error decrypting!");
     }
   };
+
+  useEffect(() => {
+    if (encrypted_text) {
+      handleGenerateLink(); // call this in the useEffect or it won't generate the proper link
+    }
+  }, [encrypted_text]);
 
   return (
     <div className="flex flex-col h-screen w-full bg-slate-900 text-slate-100 overflow-hidden">
