@@ -1,13 +1,14 @@
-import sodium from 'libsodium-wrappers';
+import sodium from 'libsodium-wrappers-sumo';
 
 export async function encrypt(text: string, password: string): Promise<string> {
   await sodium.ready;
 
   const salt = sodium.randombytes_buf(sodium.crypto_pwhash_SALTBYTES);
+  const passwordBytes = sodium.from_string(password);
 
   const key = sodium.crypto_pwhash(
     sodium.crypto_secretbox_KEYBYTES,
-    password,
+    passwordBytes,
     salt,
     sodium.crypto_pwhash_OPSLIMIT_MODERATE,
     sodium.crypto_pwhash_MEMLIMIT_MODERATE,
@@ -27,25 +28,39 @@ export async function encrypt(text: string, password: string): Promise<string> {
 export async function decrypt(payload: string, password: string): Promise<string> {
   await sodium.ready;
 
-  const [saltB64, nonceB64, ciphertextB64] = payload.split('.');
+  if (!payload || !password) {
+    throw new Error("Payload and password are required for decryption.");
+  }
 
-  const salt = sodium.from_base64(base64UrlToStandard(saltB64));
-  const nonce = sodium.from_base64(base64UrlToStandard(nonceB64));
-  const ciphertext = sodium.from_base64(base64UrlToStandard(ciphertextB64));
+  const parts = payload.split('.');
+  if (parts.length !== 3) {
+    throw new Error("Invalid payload format. Expected 3 dot-separated parts.");
+  }
+
+  const [saltB64, nonceB64, ciphertextB64] = parts;
+
+  const salt = sodium.from_base64(saltB64, sodium.base64_variants.URLSAFE_NO_PADDING);
+  const nonce = sodium.from_base64(nonceB64, sodium.base64_variants.URLSAFE_NO_PADDING);
+  const ciphertext = sodium.from_base64(ciphertextB64, sodium.base64_variants.URLSAFE_NO_PADDING);
 
   const key = sodium.crypto_pwhash(
-      sodium.crypto_secretbox_KEYBYTES,
-      password,
-      salt,
-      sodium.crypto_pwhash_OPSLIMIT_MODERATE,
-      sodium.crypto_pwhash_MEMLIMIT_MODERATE,
-      sodium.crypto_pwhash_ALG_DEFAULT
-    );
+    sodium.crypto_secretbox_KEYBYTES,
+    sodium.from_string(password),
+    salt,
+    sodium.crypto_pwhash_OPSLIMIT_MODERATE,
+    sodium.crypto_pwhash_MEMLIMIT_MODERATE,
+    sodium.crypto_pwhash_ALG_DEFAULT
+  );
 
-  sodium.crypto_secretbox_open_easy(ciphertext, nonce, key);
-  
-  return "";
+  try {
+    const decryptedBytes = sodium.crypto_secretbox_open_easy(ciphertext, nonce, key);
+    return sodium.to_string(decryptedBytes);
+  } catch (cryptoErr) {
+    console.error("Decryption failed: Incorrect password or corrupted data.");
+    return "H_P_FAILED_ENCRYPTION";
+  }
 }
+
 
 
 function bytesToBase64Url(bytes: Uint8Array): string {
