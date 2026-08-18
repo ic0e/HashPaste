@@ -86,6 +86,7 @@ function App() {
       
       const encrypted_text = await encrypt(text, password);
       setText(encrypted_text);
+      handleGenerateLink();
       setEncryptState("Successfully encrypted!");
     } catch (err) {
       console.error('Failed to encrypt: ', err);
@@ -112,6 +113,7 @@ function App() {
       }
       else {
         setText(decrypted);
+        handleGenerateLink();
         setEncryptState("Successfully decrypted!");
       }
     } catch (err) {
