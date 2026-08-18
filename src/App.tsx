@@ -11,7 +11,7 @@ function App() {
   const [generatedUrl, setGeneratedUrl] = useState('');
   const [copied, setIsCopied] = useState('Copy');
   const [linkIsCopied, setLinkIsCopied] = useState('Copy');
-  const [decryptState, setDecryptState] = useState('');
+  const [encryptState, setEncryptState] = useState('');
 
   const [password, setPassword] = useState('');
 
@@ -80,10 +80,16 @@ function App() {
     }
     
     try {
+      setEncryptState("Encrypting...");
+      
+      await new Promise((resolve) => setTimeout(resolve, 50)); // renders "Encrypting" before it tries to encrypt, better UX
+      
       const encrypted_text = await encrypt(text, password);
       setText(encrypted_text);
+      setEncryptState("Successfully encrypted!");
     } catch (err) {
       console.error('Failed to encrypt: ', err);
+      setEncryptState("Error encrypting!");
     }
   };
 
@@ -96,15 +102,21 @@ function App() {
     }
     
     try {
+      setEncryptState("Decrypting...");
+      
+      await new Promise((resolve) => setTimeout(resolve, 50)); // renders "Decrypting" before it tries to encrypt, better UX
+      
       const decrypted = await decrypt(text, password);
       if (decrypted == "H_P_FAILED_DECRYPTION") {
-        setDecryptState("Failed decrypting! Wrong password or corrupted data.");
+        setEncryptState("Failed decrypting! Wrong password or corrupted data.");
       }
       else {
         setText(decrypted);
+        setEncryptState("Successfully decrypted!");
       }
     } catch (err) {
       console.error('Failed to decrypt: ', err);
+      setEncryptState("Error decrypting!");
     }
   };
 
@@ -205,12 +217,19 @@ function App() {
                   >
                     Clear Editor
                   </button>
+        
+                  <div className="text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+                    ENCRYPT/DECRYPT CONTENT
+                  </div>
 
+                  <label className="text-[12px] font-mono uppercase">Password</label>
                   <input
                     type="text"
                     value={password}
                     onChange={handlePasswordChange}
-                  />
+                    className="w-full p-2 pr-20 bg-green-950/40 border border-slate-700 text-slate-200 text-xs rounded font-mono focus:outline-none focus:border-blue-500"
+                    />
+                    <label className="text-[10px] font-mono text-slate-400 uppercase">{encryptState}</label>
           
                   <button 
                     type="button"
