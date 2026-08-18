@@ -8,9 +8,9 @@ HashPaste is a zero database web application that compresses and embeds text dir
 
 HashPaste instantly compresses raw text using browser native compression and embeds the resulting payload directly into URL hash fragments. Because the data lives entirely within the link itself, pastes can be decoded instantly without a backend. This ensures no database storage is ever needed, the links never expire and data is recoverable even if the service shuts down. No data is accessible to anyone you haven't shared a link with.
 
-**Use cases**
-- Security; your data never gets sent to servers, no third party databases have access to anything you paste in.
-- Casual use; HashPaste is fast, there are no registrations or CAPCHAS, generating a share link is instant.
+### Use cases
+- ***Security;*** your data never gets sent to servers, no third party databases have access to anything you paste in.
+- ***Casual use;*** HashPaste is fast, there are no registrations or CAPCHAS, generating a share link is instant.
 
 ## How to Use
 
