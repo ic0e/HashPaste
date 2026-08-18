@@ -231,21 +231,23 @@ function App() {
                     />
                     <label className="text-[10px] font-mono text-slate-400 uppercase">{encryptState}</label>
           
-                  <button 
-                    type="button"
-                    onClick={() => handleEncryptContent(text, password)}
-                    className="z-10 w-full py-2 px-4 bg-green-950 hover:bg-green-900 text-green-50 font-medium border border-green-900/80 hover:border-green-700 transition-all duration-200 cursor-pointer text-sm"
-                  >
-                    Encrypt Content
-                  </button>
-
-                  <button 
-                    type="button"
-                    onClick={() => handleDecryptContent(text, password)}
-                    className="z-10 w-full py-2 px-4 bg-green-950 hover:bg-green-900 text-green-50 font-medium border border-green-900/80 hover:border-green-700 transition-all duration-200 cursor-pointer text-sm"
-                  >
-                    Decrypt Content
-                  </button>
+                    <div className="flex w-full gap-3">
+                      <button 
+                        type="button"
+                        onClick={() => handleEncryptContent(text, password)}
+                        className="z-10 flex-1 py-2 px-4 bg-green-950 hover:bg-green-900 text-green-50 font-medium border border-green-900/80 hover:border-green-700 transition-all duration-200 cursor-pointer text-sm text-center"
+                      >
+                        Encrypt Content
+                      </button>
+                    
+                      <button 
+                        type="button"
+                        onClick={() => handleDecryptContent(text, password)}
+                        className="z-10 flex-1 py-2 px-4 bg-red-950/50 hover:bg-green-900 text-green-50 font-medium border border-red-900/60 hover:border-green-700 transition-all duration-200 cursor-pointer text-sm text-center"
+                      >
+                        Decrypt Content
+                      </button>
+                    </div>
             </div>
       </div>
   </div>
