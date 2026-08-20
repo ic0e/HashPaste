@@ -238,7 +238,7 @@ function App() {
             type="text"
             value={password}
             onChange={handlePasswordChange}
-            className="w-full p-2 pr-20 bg-green-950/40 border border-slate-700 text-slate-200 text-xs rounded font-mono focus:outline-none focus:border-blue-500"
+            className="w-full p-2 pr-20 bg-green-950/40 border border-slate-700 text-slate-200 text-xs rounded font-mono focus:outline-none focus:border-blue-500 [text-security:disc] [-webkit-text-security:disc]"
           />
           <label className="text-[10px] font-mono text-slate-400 uppercase">
             {encryptState}
