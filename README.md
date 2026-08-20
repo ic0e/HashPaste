@@ -24,6 +24,15 @@ It is best used for short snippets (debug outputs, config files, security report
 
 The only constraint is URL length. Extremely large pastes create unwieldy links and for that, use a traditional pastebin. If the link itself becomes too long to share easily, the content is too big for this tool.
 
+## Features
+
+### Text compression
+Text is compressed with Brotli before embedding into the URL, reducing payload size significantly and allowing longer pastes to fit within browser limits. The editor renders markdown in real time for better readability. Generate a link instantly with no accounts or database, anyone with the link can decode the paste.
+
+### Password encryption
+Pastes can be encrypted with a password using libsodium's `crypto_secretbox`. Encrypted content is compressed before encoding into the link. Decryption requires the correct password; without it, the paste is unreadable. No encryption keys or passwords are stored anywhere.
+
+
 ## Setup and Development
 
 Clone the repository and install dependencies:
@@ -41,7 +50,8 @@ Open `http://localhost:5173` in your browser.
 
 **Upcoming:** 
 - URL shortener (conceptual idea); automatic redirects to any URL you provide, with the aim of this to be a free databaseless URL link shortener as well.
-- Client side password encryption (issue #3) - Create a password function that uses symmetric encryption on the paste with the hashed password as a key, with a password field that lets you encrypt it by entering the correct password.
+
+Check [Issues](https://github.com/ic0e/HashPaste/issues) for more upcoming features & more.
 
 Expect any feature that can benefit from databaseless URL hashing to be added.
 
