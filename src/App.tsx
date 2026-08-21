@@ -96,8 +96,6 @@ function App() {
   };
 
   const handleDecryptContent = async (text: string, password: string) => {
-    console.log("Payload to decrypt:", text);
-    console.log("Payload type:", typeof text);
     if (!text || !password) {
       console.error("Text and password are required");
       return;
