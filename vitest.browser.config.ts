@@ -14,5 +14,6 @@ export default defineConfig({
         { browser: 'chromium' }
       ],
     },
+    reporters: ['default', 'github-actions'],
   },
 })
