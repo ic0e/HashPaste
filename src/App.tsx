@@ -8,6 +8,7 @@ import Header from "./components/header";
 
 function App() {
   const [text, setText] = useState("");
+  const [count, setCount] = useState(0);
   const [generatedUrl, setGeneratedUrl] = useState("");
   const [copied, setIsCopied] = useState("Copy");
   const [linkIsCopied, setLinkIsCopied] = useState("Copy");
@@ -32,6 +33,10 @@ function App() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    setCount(text.length);
+  }, [text])
 
   const handleGenerateLink = async () => {
     try {
@@ -83,7 +88,7 @@ function App() {
         <div className="w-[80%] h-full flex flex-row border-r border-slate-800">
           <div className="w-1/2 h-full border-r border-slate-800 flex flex-col">
             <div className="flex items-center p-3 bg-slate-950 border-b border-slate-800 text-xs font-mono text-slate-400">
-              <span>EDITOR</span>
+              <span>EDITOR</span> <span className="pl-5">CHARACTERS: {count}</span>
               <button
                 className="ml-auto flex items-center gap-1.5 hover:text-slate-200 transition-colors"
                 onClick={() => handleCopy(text)}
