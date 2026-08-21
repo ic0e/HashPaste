@@ -4,7 +4,7 @@ import { markdown } from "@codemirror/lang-markdown";
 import Markdown from "react-markdown";
 import { compressText, decompressText } from "./engine/compression";
 import { EncryptionComponent } from "./components/EncryptionComponent";
-import Header from "./components/header";
+import Header from "./components/Header";
 
 function App() {
   const [text, setText] = useState("");
