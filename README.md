@@ -1,4 +1,4 @@
-# HashPaste • [![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=black)](https://react.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+# HashPaste • [![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=black)](https://react.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Tests](https://github.com/ic0e/HashPaste/actions/workflows/test.yml/badge.svg)](https://github.com/ic0e/HashPaste/actions/workflows/test.yml)
 HashPaste is a zero database web application that compresses and embeds text directly into URL hash fragments for instant sharing without backends, storage limits, or link expiration.
 
 ## Try it:
